@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
@@ -8,7 +8,7 @@
         /* 页面基础样式 */
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
-            background: #f0f2f5; /* 换成简单的纯色背景，加载更快 */
+            background: #f0f2f5;
             font-family: "Microsoft YaHei", sans-serif;
             display: flex;
             justify-content: center;
@@ -16,9 +16,10 @@
         }
         .grid-container {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            /* 4:3 比例下，建议最小宽度稍大一点（200px），看起来更舒展 */
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
             gap: 15px;
-            max-width: 1000px;
+            max-width: 1100px;
             width: 100%;
         }
         .grid-item {
@@ -32,13 +33,15 @@
         .grid-item:hover { transform: translateY(-5px); box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
         .image-box {
             width: 100%;
-            aspect-ratio: 1/1;
-            background: #e1e1e1; /* 加载前的底色 */
+            /* 核心修改：从 1/1 改为 4/3 长方形 */
+            aspect-ratio: 4 / 3;
+            background: #e1e1e1;
             overflow: hidden;
         }
         .image-box img {
             width: 100%;
             height: 100%;
+            /* 确保图片填充长方形框且不拉伸变形 */
             object-fit: cover;
             display: block;
         }
@@ -49,7 +52,7 @@
             color: #333;
             white-space: nowrap;
             overflow: hidden;
-            text-overflow: ellipsis; /* 标题太长自动省略 */
+            text-overflow: ellipsis;
         }
         @media (max-width: 480px) {
             .grid-container { grid-template-columns: repeat(2, 1fr); gap: 10px; }
@@ -59,12 +62,9 @@
 <body>
 
 <div class="grid-container">
-    <!-- 将下面的 img src 换成你自己的本地路径或国内图床地址 -->
-    
-    <a href="C:/Users/anna/Desktop/计算机/制作桌面/marie.html" class="grid-item">
+    <a href="marie.html" class="grid-item">
         <div class="image-box">
-            <!-- loading="lazy" 是原生黑科技，能显著提速 -->
-            <img src="https://xxximg.dpdns.org/img/2026/03/m14arie.{ext}" loading="lazy">
+            <img src="https://dpdns.org" loading="lazy">
         </div>
         <div class="title">上床睡觉</div>
     </a>
@@ -82,9 +82,6 @@
         </div>
         <div class="title">示例图片 03</div>
     </a>
-
-    <!-- 复制更多... -->
-
 </div>
 
 </body>
