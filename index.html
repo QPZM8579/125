@@ -1,0 +1,91 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>极速图片展示墙</title>
+    <style>
+        /* 页面基础样式 */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: #f0f2f5; /* 换成简单的纯色背景，加载更快 */
+            font-family: "Microsoft YaHei", sans-serif;
+            display: flex;
+            justify-content: center;
+            padding: 20px;
+        }
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 15px;
+            max-width: 1000px;
+            width: 100%;
+        }
+        .grid-item {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            text-decoration: none;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+            transition: 0.3s;
+        }
+        .grid-item:hover { transform: translateY(-5px); box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+        .image-box {
+            width: 100%;
+            aspect-ratio: 1/1;
+            background: #e1e1e1; /* 加载前的底色 */
+            overflow: hidden;
+        }
+        .image-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+        .title {
+            padding: 10px;
+            text-align: center;
+            font-size: 14px;
+            color: #333;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis; /* 标题太长自动省略 */
+        }
+        @media (max-width: 480px) {
+            .grid-container { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="grid-container">
+    <!-- 将下面的 img src 换成你自己的本地路径或国内图床地址 -->
+    
+    <a href="C:/Users/anna/Desktop/计算机/制作桌面/marie.html" class="grid-item">
+        <div class="image-box">
+            <!-- loading="lazy" 是原生黑科技，能显著提速 -->
+            <img src="https://xxximg.dpdns.org/img/2026/03/m14arie.{ext}" loading="lazy">
+        </div>
+        <div class="title">上床睡觉</div>
+    </a>
+
+    <a href="#" class="grid-item">
+        <div class="image-box">
+            <img src="https://img.yzcdn.cn" loading="lazy">
+        </div>
+        <div class="title">示例图片 02</div>
+    </a>
+
+    <a href="#" class="grid-item">
+        <div class="image-box">
+            <img src="https://img.yzcdn.cn" loading="lazy">
+        </div>
+        <div class="title">示例图片 03</div>
+    </a>
+
+    <!-- 复制更多... -->
+
+</div>
+
+</body>
+</html>
