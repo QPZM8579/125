@@ -3,86 +3,75 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>极速图片展示墙</title>
+    <title>极速图片展示墙 (竖版3:4)</title>
     <style>
-        /* 页面基础样式 */
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body {
-            background: #f0f2f5;
-            font-family: "Microsoft YaHei", sans-serif;
-            display: flex;
-            justify-content: center;
-            padding: 20px;
-        }
+        body { background: #f0f2f5; font-family: "Microsoft YaHei", sans-serif; display: flex; justify-content: center; padding: 20px; }
+        
         .grid-container {
             display: grid;
-            /* 4:3 比例下，建议最小宽度稍大一点（200px），看起来更舒展 */
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 15px;
+            /* 竖向长方形建议最小宽度 160px-180px，排列更紧凑好看 */
+            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+            gap: 12px;
             max-width: 1100px;
             width: 100%;
         }
+        
         .grid-item {
-            background: white;
-            border-radius: 12px;
-            overflow: hidden;
-            text-decoration: none;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-            transition: 0.3s;
+            background: white; border-radius: 10px; overflow: hidden;
+            text-decoration: none; box-shadow: 0 2px 8px rgba(0,0,0,0.06); transition: 0.3s;
         }
+        
         .grid-item:hover { transform: translateY(-5px); box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
-        .image-box {
-            width: 100%;
-            /* 核心修改：从 1/1 改为 4/3 长方形 */
-            aspect-ratio: 4 / 3;
-            background: #e1e1e1;
-            overflow: hidden;
+        
+        .image-box { 
+            width: 100%; 
+            /* 核心修改：设置为 3:4 竖版比例 */
+            aspect-ratio: 3 / 4; 
+            background: #e1e1e1; 
+            overflow: hidden; 
         }
-        .image-box img {
-            width: 100%;
-            height: 100%;
-            /* 确保图片填充长方形框且不拉伸变形 */
-            object-fit: cover;
-            display: block;
+        
+        .image-box img { 
+            width: 100%; height: 100%; 
+            object-fit: cover; /* 保证图片竖向填充，不拉伸 */
+            display: block; 
         }
-        .title {
-            padding: 10px;
-            text-align: center;
-            font-size: 14px;
-            color: #333;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
+        
+        .title { 
+            padding: 8px; text-align: center; font-size: 13px; color: #333; 
+            white-space: nowrap; overflow: hidden; text-overflow: ellipsis; 
         }
-        @media (max-width: 480px) {
-            .grid-container { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+        
+        @media (max-width: 480px) { 
+            .grid-container { grid-template-columns: repeat(2, 1fr); gap: 10px; } 
         }
     </style>
 </head>
 <body>
 
-<div class="grid-container">
-    <a href="marie.html" class="grid-item">
-        <div class="image-box">
-            <img src="https://dpdns.org" loading="lazy">
-        </div>
-        <div class="title">上床睡觉</div>
-    </a>
+<div class="grid-container" id="mainGrid"></div>
 
-    <a href="#" class="grid-item">
-        <div class="image-box">
-            <img src="https://img.yzcdn.cn" loading="lazy">
-        </div>
-        <div class="title">示例图片 02</div>
-    </a>
+<script>
+    // 在这里快速添加图片数据
+    const imageList = [
+        { title: "上床睡觉", img: "https://dpdns.org", url: "marie.html" },
+        { title: "竖版示例 02", img: "https://yzcdn.cn", url: "#" },
+        { title: "竖版示例 03", img: "https://yzcdn.cn", url: "#" },
+        { title: "竖版示例 04", img: "https://yzcdn.cn", url: "#" },
+        { title: "竖版示例 05", img: "https://yzcdn.cn", url: "#" }
+    ];
 
-    <a href="#" class="grid-item">
-        <div class="image-box">
-            <img src="https://img.yzcdn.cn" loading="lazy">
-        </div>
-        <div class="title">示例图片 03</div>
-    </a>
-</div>
+    const grid = document.getElementById('mainGrid');
+    grid.innerHTML = imageList.map(item => `
+        <a href="${item.url}" class="grid-item">
+            <div class="image-box">
+                <img src="${item.img}" loading="lazy">
+            </div>
+            <div class="title">${item.title}</div>
+        </a>
+    `).join('');
+</script>
 
 </body>
 </html>
