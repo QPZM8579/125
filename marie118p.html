@@ -1,0 +1,165 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>图片轮播</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background: #000;
+        }
+        .slideshow {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .slide {
+            display: none;
+            width: 100%;
+            height: 100%;
+            object-fit: contain; /* 保持图片像素不变，完整显示 */
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+        .slide.active {
+            display: block;
+        }
+        .arrow {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 20px;
+            color: rgba(255, 255, 255, 0.25); /* 白色，30%透明度 */
+            background: none;
+            cursor: pointer;
+            user-select: none;
+        }
+        .left-arrow {
+            left: 20px;
+        }
+        .right-arrow {
+            right: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="slideshow">
+        <!-- 示例图片，可替换为你的图片路径 -->
+              <img class="slide" src="https://xxximg.dpdns.org/img/2026/03/marie (118).{ext}"/>
+              <img class="slide" src="https://xxximg.dpdns.org/img/2026/03/marie (117).{ext}"/>
+              <img class="slide" src="https://xxximg.dpdns.org/img/2026/03/marie (116).{ext}"/>
+              <img class="slide" src="https://xxximg.dpdns.org/img/2026/03/marie (115).{ext}"/>
+              <img class="slide" src="https://xxximg.dpdns.org/img/2026/03/marie (114).{ext}"/>
+              <img class="slide" src="https://xxximg.dpdns.org/img/2026/03/marie (113).{ext}"/>
+              <img class="slide" src="https://xxximg.dpdns.org/img/2026/03/marie (112).{ext}"/>
+              <img class="slide" src="https://xxximg.dpdns.org/img/2026/03/marie (111).{ext}"/>
+              <img class="slide" src="https://xxximg.dpdns.org/img/2026/03/marie (110).{ext}"/>
+              <img class="slide" src="https://xxximg.dpdns.org/img/2026/03/marie (109).{ext}"/>
+              <img class="slide" src="https://xxximg.dpdns.org/img/2026/03/marie (108).{ext}"/>
+              <img class="slide" src="https://xxximg.dpdns.org/img/2026/03/marie (107).{ext}"/>
+              <img class="slide" src="https://xxximg.dpdns.org/img/2026/03/marie (106).{ext}"/>
+              <img class="slide" src="https://xxximg.dpdns.org/img/2026/03/marie (105).{ext}"/>
+              <img class="slide" src="https://xxximg.dpdns.org/img/2026/03/marie (104).{ext}"/>
+              <img class="slide" src="https://xxximg.dpdns.org/img/2026/03/marie (103).{ext}"/>
+              <img class="slide" src="https://xxximg.dpdns.org/img/2026/03/marie (102).{ext}"/>
+              <img class="slide" src="https://xxximg.dpdns.org/img/2026/03/marie (101).{ext}"/>
+              <img class="slide" src="https://xxximg.dpdns.org/img/2026/03/marie (100).{ext}"/>
+              <img class="slide" src="https://xxximg.dpdns.org/img/2026/03/marie (99).{ext}"/>
+              <img class="slide" src="https://xxximg.dpdns.org/img/2026/03/marie (96).{ext}"/>
+              <img class="slide" src="https://xxximg.dpdns.org/img/2026/03/marie (93).{ext}"/>
+              <img class="slide" src="https://xxximg.dpdns.org/img/2026/03/marie (89).{ext}"/>
+              <img class="slide" src="https://xxximg.dpdns.org/img/2026/03/marie (88).{ext}"/>
+              <img class="slide" src="https://xxximg.dpdns.org/img/2026/03/marie (87).{ext}"/>
+              <img class="slide" src="https://xxximg.dpdns.org/img/2026/03/marie (77).{ext}"/>
+              <img class="slide" src="https://xxximg.dpdns.org/img/2026/03/marie (75).{ext}"/>
+              <img class="slide" src="https://xxximg.dpdns.org/img/2026/03/marie (73).{ext}"/>
+              <img class="slide" src="https://xxximg.dpdns.org/img/2026/03/marie (70).{ext}"/>
+              <img class="slide" src="https://xxximg.dpdns.org/img/2026/03/marie (65).{ext}"/>
+              <img class="slide" src="https://xxximg.dpdns.org/img/2026/03/marie (63).{ext}"/>
+              <img class="slide" src="https://xxximg.dpdns.org/img/2026/03/marie (60).{ext}"/>
+              <img class="slide" src="https://xxximg.dpdns.org/img/2026/03/marie (59).{ext}"/>
+              <img class="slide" src="https://xxximg.dpdns.org/img/2026/03/marie (53).{ext}"/>
+              <img class="slide" src="https://xxximg.dpdns.org/img/2026/03/marie (46).{ext}"/>
+              <img class="slide" src="https://xxximg.dpdns.org/img/2026/03/marie (41).{ext}"/>
+              <img class="slide" src="https://xxximg.dpdns.org/img/2026/03/marie (37).{ext}"/>
+              <img class="slide" src="https://xxximg.dpdns.org/img/2026/03/marie (34).{ext}"/>
+              <img class="slide" src="https://xxximg.dpdns.org/img/2026/03/marie (29).{ext}"/>
+              <img class="slide" src="https://xxximg.dpdns.org/img/2026/03/marie (24).{ext}"/>
+              <img class="slide" src="https://xxximg.dpdns.org/img/2026/03/marie (22).{ext}"/>
+              <img class="slide" src="https://xxximg.dpdns.org/img/2026/03/marie (21).{ext}"/>
+              <img class="slide" src="https://xxximg.dpdns.org/img/2026/03/marie (20).{ext}"/>
+              <img class="slide" src="https://xxximg.dpdns.org/img/2026/03/marie (19).{ext}"/>
+              <img class="slide" src="https://xxximg.dpdns.org/img/2026/03/marie (18).{ext}"/>
+              <img class="slide" src="https://xxximg.dpdns.org/img/2026/03/marie (17).{ext}"/>
+              <img class="slide" src="https://xxximg.dpdns.org/img/2026/03/marie (16).{ext}"/>
+              <img class="slide" src="https://xxximg.dpdns.org/img/2026/03/marie (15).{ext}"/>
+              <img class="slide" src="https://xxximg.dpdns.org/img/2026/03/marie (14).{ext}"/>
+              <img class="slide" src="https://xxximg.dpdns.org/img/2026/03/marie (13).{ext}"/>
+              <img class="slide" src="https://xxximg.dpdns.org/img/2026/03/marie (12).{ext}"/>
+              <img class="slide" src="https://xxximg.dpdns.org/img/2026/03/marie (11).{ext}"/>
+              <img class="slide" src="https://xxximg.dpdns.org/img/2026/03/marie (10).{ext}"/>
+              <img class="slide" src="https://xxximg.dpdns.org/img/2026/03/marie (8).{ext}"/>
+              <img class="slide" src="https://xxximg.dpdns.org/img/2026/03/marie (6).{ext}"/>
+              <img class="slide" src="https://xxximg.dpdns.org/img/2026/03/marie (4).{ext}"/>
+              <img class="slide" src="https://xxximg.dpdns.org/img/2026/03/marie (2).{ext}"/>
+              <img class="slide" src="https://xxximg.dpdns.org/img/2026/03/marie (1).{ext}"/>
+        <div class="arrow left-arrow">〈</div>
+        <div class="arrow right-arrow">〉</div>
+    </div>
+
+    <script>
+        const slides = document.querySelectorAll('.slide');
+        const slideshow = document.querySelector('.slideshow');
+        let currentSlide = 0;
+
+        // 显示当前幻灯片
+        function showSlide(index) {
+            slides.forEach((slide, i) => {
+                slide.classList.toggle('active', i === index);
+            });
+        }
+
+        // 下一张
+        function nextSlide() {
+            currentSlide = (currentSlide + 1) % slides.length;
+            showSlide(currentSlide);
+        }
+
+        // 上一张
+        function prevSlide() {
+            currentSlide = (currentSlide - 1 + slides.length) % slides.length;
+            showSlide(currentSlide);
+        }
+
+        // 自动轮播
+        let autoSlide = setInterval(nextSlide, 5000);
+
+        // 点击事件
+        slideshow.addEventListener('click', (e) => {
+            const rect = slideshow.getBoundingClientRect();
+            const clickX = e.clientX - rect.left;
+
+            // 重置自动轮播计时器
+            clearInterval(autoSlide);
+            autoSlide = setInterval(nextSlide, 5000);
+
+            // 判断点击区域
+            if (clickX < rect.width / 2) {
+                prevSlide(); // 点击左半边，上一张
+            } else {
+                nextSlide(); // 点击右半边，下一张
+            }
+        });
+
+        // 初始化显示第一张
+        showSlide(currentSlide);
+    </script>
+</body>
+</html>
