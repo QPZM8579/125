@@ -1,0 +1,132 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>图片轮播</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background: #000;
+        }
+        .slideshow {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .slide {
+            display: none;
+            width: 100%;
+            height: 100%;
+            object-fit: contain; /* 保持图片像素不变，完整显示 */
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+        .slide.active {
+            display: block;
+        }
+        .arrow {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 20px;
+            color: rgba(255, 255, 255, 0.25); /* 白色，30%透明度 */
+            background: none;
+            cursor: pointer;
+            user-select: none;
+        }
+        .left-arrow {
+            left: 20px;
+        }
+        .right-arrow {
+            right: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="slideshow">
+        <!-- 示例图片，可替换为你的图片路径 -->
+              <img class="slide" src="https://xxximg.dpdns.org/img/2026/03/alecia (1).{ext}"/>
+              <img class="slide" src="https://xxximg.dpdns.org/img/2026/03/alecia (3).{ext}"/>
+              <img class="slide" src="https://xxximg.dpdns.org/img/2026/03/alecia (5).{ext}"/>
+              <img class="slide" src="https://xxximg.dpdns.org/img/2026/03/alecia (7).{ext}"/>
+              <img class="slide" src="https://xxximg.dpdns.org/img/2026/03/alecia (8).{ext}"/>
+              <img class="slide" src="https://xxximg.dpdns.org/img/2026/03/alecia (9).{ext}"/>
+              <img class="slide" src="https://xxximg.dpdns.org/img/2026/03/alecia (10).{ext}"/>
+              <img class="slide" src="https://xxximg.dpdns.org/img/2026/03/alecia (11).{ext}"/>
+              <img class="slide" src="https://xxximg.dpdns.org/img/2026/03/alecia (12).{ext}"/>
+              <img class="slide" src="https://xxximg.dpdns.org/img/2026/03/alecia (13).{ext}"/>
+              <img class="slide" src="https://xxximg.dpdns.org/img/2026/03/alecia (15).{ext}"/>
+              <img class="slide" src="https://xxximg.dpdns.org/img/2026/03/alecia (16).{ext}"/>
+              <img class="slide" src="https://xxximg.dpdns.org/img/2026/03/alecia (17).{ext}"/>
+              <img class="slide" src="https://xxximg.dpdns.org/img/2026/03/alecia (19).{ext}"/>
+              <img class="slide" src="https://xxximg.dpdns.org/img/2026/03/alecia (20).{ext}"/>
+              <img class="slide" src="https://xxximg.dpdns.org/img/2026/03/alecia (21).{ext}"/>
+              <img class="slide" src="https://xxximg.dpdns.org/img/2026/03/alecia (22).{ext}"/>
+              <img class="slide" src="https://xxximg.dpdns.org/img/2026/03/alecia (25).{ext}"/>
+              <img class="slide" src="https://xxximg.dpdns.org/img/2026/03/alecia (28).{ext}"/>
+              <img class="slide" src="https://xxximg.dpdns.org/img/2026/03/alecia (29).{ext}"/>
+              <img class="slide" src="https://xxximg.dpdns.org/img/2026/03/alecia (30).{ext}"/>
+              <img class="slide" src="https://xxximg.dpdns.org/img/2026/03/alecia (31).{ext}"/>
+              <img class="slide" src="https://xxximg.dpdns.org/img/2026/03/alecia (32).{ext}"/>
+              <img class="slide" src="https://xxximg.dpdns.org/img/2026/03/alecia (37).{ext}"/>
+              <img class="slide" src="https://xxximg.dpdns.org/img/2026/03/alecia (38).{ext}"/>
+        <div class="arrow left-arrow">〈</div>
+        <div class="arrow right-arrow">〉</div>
+    </div>
+
+    <script>
+        const slides = document.querySelectorAll('.slide');
+        const slideshow = document.querySelector('.slideshow');
+        let currentSlide = 0;
+
+        // 显示当前幻灯片
+        function showSlide(index) {
+            slides.forEach((slide, i) => {
+                slide.classList.toggle('active', i === index);
+            });
+        }
+
+        // 下一张
+        function nextSlide() {
+            currentSlide = (currentSlide + 1) % slides.length;
+            showSlide(currentSlide);
+        }
+
+        // 上一张
+        function prevSlide() {
+            currentSlide = (currentSlide - 1 + slides.length) % slides.length;
+            showSlide(currentSlide);
+        }
+
+        // 自动轮播
+        let autoSlide = setInterval(nextSlide, 5000);
+
+        // 点击事件
+        slideshow.addEventListener('click', (e) => {
+            const rect = slideshow.getBoundingClientRect();
+            const clickX = e.clientX - rect.left;
+
+            // 重置自动轮播计时器
+            clearInterval(autoSlide);
+            autoSlide = setInterval(nextSlide, 5000);
+
+            // 判断点击区域
+            if (clickX < rect.width / 2) {
+                prevSlide(); // 点击左半边，上一张
+            } else {
+                nextSlide(); // 点击右半边，下一张
+            }
+        });
+
+        // 初始化显示第一张
+        showSlide(currentSlide);
+    </script>
+</body>
+</html>
