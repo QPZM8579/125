@@ -1,0 +1,200 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>图片轮播</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background: #000;
+        }
+        .slideshow {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .slide {
+            display: none;
+            width: 100%;
+            height: 100%;
+            object-fit: contain; /* 保持图片像素不变，完整显示 */
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+        .slide.active {
+            display: block;
+        }
+        .arrow {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 20px;
+            color: rgba(255, 255, 255, 0.25); /* 白色，30%透明度 */
+            background: none;
+            cursor: pointer;
+            user-select: none;
+        }
+        .left-arrow {
+            left: 20px;
+        }
+        .right-arrow {
+            right: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="slideshow">
+        <!-- 示例图片，可替换为你的图片路径 -->
+              <img class="slide" src="https://xxximg.dpdns.org/img/2026/03/gomcyu (98).{ext}"/>
+              <img class="slide" src="https://xxximg.dpdns.org/img/2026/03/gomcyu (97).{ext}"/>
+              <img class="slide" src="https://xxximg.dpdns.org/img/2026/03/gomcyu (96).{ext}"/>
+              <img class="slide" src="https://xxximg.dpdns.org/img/2026/03/gomcyu (95).{ext}"/>
+              <img class="slide" src="https://xxximg.dpdns.org/img/2026/03/gomcyu (94).{ext}"/>
+              <img class="slide" src="https://xxximg.dpdns.org/img/2026/03/gomcyu (93).{ext}"/>
+              <img class="slide" src="https://xxximg.dpdns.org/img/2026/03/gomcyu (92).{ext}"/>
+              <img class="slide" src="https://xxximg.dpdns.org/img/2026/03/gomcyu (91).{ext}"/>
+              <img class="slide" src="https://xxximg.dpdns.org/img/2026/03/gomcyu (90).{ext}"/>
+              <img class="slide" src="https://xxximg.dpdns.org/img/2026/03/gomcyu (89).{ext}"/>
+              <img class="slide" src="https://xxximg.dpdns.org/img/2026/03/gomcyu (88).{ext}"/>
+              <img class="slide" src="https://xxximg.dpdns.org/img/2026/03/gomcyu (87).{ext}"/>
+              <img class="slide" src="https://xxximg.dpdns.org/img/2026/03/gomcyu (86).{ext}"/>
+              <img class="slide" src="https://xxximg.dpdns.org/img/2026/03/gomcyu (85).{ext}"/>
+              <img class="slide" src="https://xxximg.dpdns.org/img/2026/03/gomcyu (83).{ext}"/>
+              <img class="slide" src="https://xxximg.dpdns.org/img/2026/03/gomcyu (82).{ext}"/>
+              <img class="slide" src="https://xxximg.dpdns.org/img/2026/03/gomcyu (81).{ext}"/>
+              <img class="slide" src="https://xxximg.dpdns.org/img/2026/03/gomcyu (80).{ext}"/>
+              <img class="slide" src="https://xxximg.dpdns.org/img/2026/03/gomcyu (79).{ext}"/>
+              <img class="slide" src="https://xxximg.dpdns.org/img/2026/03/gomcyu (78).{ext}"/>
+              <img class="slide" src="https://xxximg.dpdns.org/img/2026/03/gomcyu (77).{ext}"/>
+              <img class="slide" src="https://xxximg.dpdns.org/img/2026/03/gomcyu (76).{ext}"/>
+              <img class="slide" src="https://xxximg.dpdns.org/img/2026/03/gomcyu (75).{ext}"/>
+              <img class="slide" src="https://xxximg.dpdns.org/img/2026/03/gomcyu (74).{ext}"/>
+              <img class="slide" src="https://xxximg.dpdns.org/img/2026/03/gomcyu (73).{ext}"/>
+              <img class="slide" src="https://xxximg.dpdns.org/img/2026/03/gomcyu (72).{ext}"/>
+              <img class="slide" src="https://xxximg.dpdns.org/img/2026/03/gomcyu (71).{ext}"/>
+              <img class="slide" src="https://xxximg.dpdns.org/img/2026/03/gomcyu (70).{ext}"/>
+              <img class="slide" src="https://xxximg.dpdns.org/img/2026/03/gomcyu (69).{ext}"/>
+              <img class="slide" src="https://xxximg.dpdns.org/img/2026/03/gomcyu (68).{ext}"/>
+              <img class="slide" src="https://xxximg.dpdns.org/img/2026/03/gomcyu (67).{ext}"/>
+              <img class="slide" src="https://xxximg.dpdns.org/img/2026/03/gomcyu (66).{ext}"/>
+              <img class="slide" src="https://xxximg.dpdns.org/img/2026/03/gomcyu (65).{ext}"/>
+              <img class="slide" src="https://xxximg.dpdns.org/img/2026/03/gomcyu (64).{ext}"/>
+              <img class="slide" src="https://xxximg.dpdns.org/img/2026/03/gomcyu (63).{ext}"/>
+              <img class="slide" src="https://xxximg.dpdns.org/img/2026/03/gomcyu (61).{ext}"/>
+              <img class="slide" src="https://xxximg.dpdns.org/img/2026/03/gomcyu (60).{ext}"/>
+              <img class="slide" src="https://xxximg.dpdns.org/img/2026/03/gomcyu (59).{ext}"/>
+              <img class="slide" src="https://xxximg.dpdns.org/img/2026/03/gomcyu (57).{ext}"/>
+              <img class="slide" src="https://xxximg.dpdns.org/img/2026/03/gomcyu (56).{ext}"/>
+              <img class="slide" src="https://xxximg.dpdns.org/img/2026/03/gomcyu (55).{ext}"/>
+              <img class="slide" src="https://xxximg.dpdns.org/img/2026/03/gomcyu (53).{ext}"/>
+              <img class="slide" src="https://xxximg.dpdns.org/img/2026/03/gomcyu (52).{ext}"/>
+              <img class="slide" src="https://xxximg.dpdns.org/img/2026/03/gomcyu (50).{ext}"/>
+              <img class="slide" src="https://xxximg.dpdns.org/img/2026/03/gomcyu (49).{ext}"/>
+              <img class="slide" src="https://xxximg.dpdns.org/img/2026/03/gomcyu (48).{ext}"/>
+              <img class="slide" src="https://xxximg.dpdns.org/img/2026/03/gomcyu (47).{ext}"/>
+              <img class="slide" src="https://xxximg.dpdns.org/img/2026/03/gomcyu (46).{ext}"/>
+              <img class="slide" src="https://xxximg.dpdns.org/img/2026/03/gomcyu (45).{ext}"/>
+              <img class="slide" src="https://xxximg.dpdns.org/img/2026/03/gomcyu (44).{ext}"/>
+              <img class="slide" src="https://xxximg.dpdns.org/img/2026/03/gomcyu (43).{ext}"/>
+              <img class="slide" src="https://xxximg.dpdns.org/img/2026/03/gomcyu (42).{ext}"/>
+              <img class="slide" src="https://xxximg.dpdns.org/img/2026/03/gomcyu (41).{ext}"/>
+              <img class="slide" src="https://xxximg.dpdns.org/img/2026/03/gomcyu (40).{ext}"/>
+              <img class="slide" src="https://xxximg.dpdns.org/img/2026/03/gomcyu (39).{ext}"/>
+              <img class="slide" src="https://xxximg.dpdns.org/img/2026/03/gomcyu (38).{ext}"/>
+              <img class="slide" src="https://xxximg.dpdns.org/img/2026/03/gomcyu (37).{ext}"/>
+              <img class="slide" src="https://xxximg.dpdns.org/img/2026/03/gomcyu (36).{ext}"/>
+              <img class="slide" src="https://xxximg.dpdns.org/img/2026/03/gomcyu (35).{ext}"/>
+              <img class="slide" src="https://xxximg.dpdns.org/img/2026/03/gomcyu (34).{ext}"/>
+              <img class="slide" src="https://xxximg.dpdns.org/img/2026/03/gomcyu (33).{ext}"/>
+              <img class="slide" src="https://xxximg.dpdns.org/img/2026/03/gomcyu (32).{ext}"/>
+              <img class="slide" src="https://xxximg.dpdns.org/img/2026/03/gomcyu (31).{ext}"/>
+              <img class="slide" src="https://xxximg.dpdns.org/img/2026/03/gomcyu (30).{ext}"/>
+              <img class="slide" src="https://xxximg.dpdns.org/img/2026/03/gomcyu (29).{ext}"/>
+              <img class="slide" src="https://xxximg.dpdns.org/img/2026/03/gomcyu (28).{ext}"/>
+              <img class="slide" src="https://xxximg.dpdns.org/img/2026/03/gomcyu (27).{ext}"/>
+              <img class="slide" src="https://xxximg.dpdns.org/img/2026/03/gomcyu (26).{ext}"/>
+              <img class="slide" src="https://xxximg.dpdns.org/img/2026/03/gomcyu (25).{ext}"/>
+              <img class="slide" src="https://xxximg.dpdns.org/img/2026/03/gomcyu (24).{ext}"/>
+              <img class="slide" src="https://xxximg.dpdns.org/img/2026/03/gomcyu (23).{ext}"/>
+              <img class="slide" src="https://xxximg.dpdns.org/img/2026/03/gomcyu (22).{ext}"/>
+              <img class="slide" src="https://xxximg.dpdns.org/img/2026/03/gomcyu (21).{ext}"/>
+              <img class="slide" src="https://xxximg.dpdns.org/img/2026/03/gomcyu (20).{ext}"/>
+              <img class="slide" src="https://xxximg.dpdns.org/img/2026/03/gomcyu (19).{ext}"/>
+              <img class="slide" src="https://xxximg.dpdns.org/img/2026/03/gomcyu (18).{ext}"/>
+              <img class="slide" src="https://xxximg.dpdns.org/img/2026/03/gomcyu (17).{ext}"/>
+              <img class="slide" src="https://xxximg.dpdns.org/img/2026/03/gomcyu (16).{ext}"/>
+              <img class="slide" src="https://xxximg.dpdns.org/img/2026/03/gomcyu (15).{ext}"/>
+              <img class="slide" src="https://xxximg.dpdns.org/img/2026/03/gomcyu (14).{ext}"/>
+              <img class="slide" src="https://xxximg.dpdns.org/img/2026/03/gomcyu (13).{ext}"/>
+              <img class="slide" src="https://xxximg.dpdns.org/img/2026/03/gomcyu (12).{ext}"/>
+              <img class="slide" src="https://xxximg.dpdns.org/img/2026/03/gomcyu (11).{ext}"/>
+              <img class="slide" src="https://xxximg.dpdns.org/img/2026/03/gomcyu (10).{ext}"/>
+              <img class="slide" src="https://xxximg.dpdns.org/img/2026/03/gomcyu (9).{ext}"/>
+              <img class="slide" src="https://xxximg.dpdns.org/img/2026/03/gomcyu (8).{ext}"/>
+              <img class="slide" src="https://xxximg.dpdns.org/img/2026/03/gomcyu (7).{ext}"/>
+              <img class="slide" src="https://xxximg.dpdns.org/img/2026/03/gomcyu (6).{ext}"/>
+              <img class="slide" src="https://xxximg.dpdns.org/img/2026/03/gomcyu (5).{ext}"/>
+              <img class="slide" src="https://xxximg.dpdns.org/img/2026/03/gomcyu (4).{ext}"/>
+              <img class="slide" src="https://xxximg.dpdns.org/img/2026/03/gomcyu (3).{ext}"/>
+              <img class="slide" src="https://xxximg.dpdns.org/img/2026/03/gomcyu (2).{ext}"/>
+              <img class="slide" src="https://xxximg.dpdns.org/img/2026/03/gomcyu (1).{ext}"/>
+        <div class="arrow left-arrow">〈</div>
+        <div class="arrow right-arrow">〉</div>
+    </div>
+
+    <script>
+        const slides = document.querySelectorAll('.slide');
+        const slideshow = document.querySelector('.slideshow');
+        let currentSlide = 0;
+
+        // 显示当前幻灯片
+        function showSlide(index) {
+            slides.forEach((slide, i) => {
+                slide.classList.toggle('active', i === index);
+            });
+        }
+
+        // 下一张
+        function nextSlide() {
+            currentSlide = (currentSlide + 1) % slides.length;
+            showSlide(currentSlide);
+        }
+
+        // 上一张
+        function prevSlide() {
+            currentSlide = (currentSlide - 1 + slides.length) % slides.length;
+            showSlide(currentSlide);
+        }
+
+        // 自动轮播
+        let autoSlide = setInterval(nextSlide, 5000);
+
+        // 点击事件
+        slideshow.addEventListener('click', (e) => {
+            const rect = slideshow.getBoundingClientRect();
+            const clickX = e.clientX - rect.left;
+
+            // 重置自动轮播计时器
+            clearInterval(autoSlide);
+            autoSlide = setInterval(nextSlide, 5000);
+
+            // 判断点击区域
+            if (clickX < rect.width / 2) {
+                prevSlide(); // 点击左半边，上一张
+            } else {
+                nextSlide(); // 点击右半边，下一张
+            }
+        });
+
+        // 初始化显示第一张
+        showSlide(currentSlide);
+    </script>
+</body>
+</html>
