@@ -3,36 +3,39 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>极简滑动轮播 - 触屏优化版</title>
+    <title>极简缩放轮播</title>
     <style>
         body, html {
             margin: 0; padding: 0; width: 100%; height: 100%;
             overflow: hidden; background: #000;
             font-family: -apple-system, sans-serif;
         }
-
         .slideshow {
             position: relative;
             width: 100vw;
             height: 100vh;
-            /* 关键：禁用浏览器默认手势，交给JS处理 */
-            touch-action: none; 
-            overflow: hidden;
+            touch-action: none; /* 必须禁用，否则双指会触发浏览器缩放 */
         }
-
-        .slide {
+        .slide-item {
             width: 100%; height: 100%;
-            object-fit: contain;
             position: absolute;
             top: 0; left: 0;
-            display: none;
+            display: none; /* 默认隐藏 */
+            align-items: center;
+            justify-content: center;
             z-index: 1;
         }
-        .slide.active { 
-            display: block; 
-            z-index: 2; 
+        .slide-item.active {
+            display: flex;
+            z-index: 2;
         }
-
+        .slide-item img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+            transform-origin: center center;
+            transition: transform 0.1s ease-out; /* 缩放时的微弱平滑感 */
+        }
         .counter {
             position: absolute;
             top: env(safe-area-inset-top, 20px);
@@ -45,10 +48,7 @@
             border-radius: 20px;
             font-size: 14px;
             z-index: 30;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            pointer-events: none;
         }
-
         .progress-bar {
             position: absolute;
             bottom: 0; left: 0;
@@ -107,39 +107,43 @@
         let currentSlide = 0;
         let timer = null;
         let progressInterval = null;
+        let scale = 1; // 当前缩放比例
         const duration = 3000; 
 
-        // 生成图片
+        // 1. 初始化图片
         imageUrls.forEach((url, index) => {
+            const div = document.createElement('div');
+            div.className = 'slide-item' + (index === 0 ? ' active' : '');
             const img = document.createElement('img');
             img.src = url;
-            img.className = 'slide' + (index === 0 ? ' active' : '');
-            slideshow.appendChild(img);
+            div.appendChild(img);
+            slideshow.appendChild(div);
         });
 
-        const slides = document.querySelectorAll('.slide');
-        const totalSlides = slides.length;
+        const slideItems = document.querySelectorAll('.slide-item');
+        const totalSlides = slideItems.length;
 
         function updateUI() {
-            slides.forEach(s => s.style.display = 'none');
-            slides[currentSlide].style.display = 'block';
+            slideItems.forEach((item, i) => {
+                item.classList.toggle('active', i === currentSlide);
+                // 切换时重置上一张图的缩放
+                if (i !== currentSlide) {
+                    item.querySelector('img').style.transform = `scale(1)`;
+                }
+            });
+            scale = 1; // 重置缩放倍数
             counter.innerText = `${currentSlide + 1} / ${totalSlides}`;
             resetProgressBar();
             startAutoPlay();
         }
 
-        function nextSlide() {
-            currentSlide = (currentSlide + 1) % totalSlides;
-            updateUI();
-        }
+        function nextSlide() { currentSlide = (currentSlide + 1) % totalSlides; updateUI(); }
+        function prevSlide() { currentSlide = (currentSlide - 1 + totalSlides) % totalSlides; updateUI(); }
 
-        function prevSlide() {
-            currentSlide = (currentSlide - 1 + totalSlides) % totalSlides;
-            updateUI();
-        }
-
+        // 2. 自动播放
         function startAutoPlay() {
             stopAutoPlay();
+            if (scale > 1.05) return; // 放大状态下不自动轮播
             timer = setInterval(nextSlide, duration);
             let start = Date.now();
             progressInterval = setInterval(() => {
@@ -148,45 +152,64 @@
             }, 50);
         }
 
-        function stopAutoPlay() {
-            clearInterval(timer);
-            clearInterval(progressInterval);
-        }
+        function stopAutoPlay() { clearInterval(timer); clearInterval(progressInterval); }
+        function resetProgressBar() { progressBar.style.width = '0%'; }
 
-        function resetProgressBar() {
-            progressBar.style.width = '0%';
-        }
-
-        // --- 手机滑动修复版 ---
+        // 3. 触摸逻辑（区分滑动切换和双指缩放）
+        let startDist = 0;
         let touchStartX = 0;
-        let touchStartY = 0;
 
         slideshow.addEventListener('touchstart', e => {
-            touchStartX = e.touches[0].clientX;
-            touchStartY = e.touches[0].clientY;
             stopAutoPlay();
+            if (e.touches.length === 1) {
+                touchStartX = e.touches[0].clientX;
+            } else if (e.touches.length === 2) {
+                // 计算两指间距
+                startDist = Math.hypot(e.touches[0].pageX - e.touches[1].pageX, e.touches[0].pageY - e.touches[1].pageY);
+            }
         }, { passive: false });
 
         slideshow.addEventListener('touchmove', e => {
-            // 防止滑动时页面上下滚动
-            if (Math.abs(e.touches[0].clientX - touchStartX) > 10) {
+            if (e.touches.length === 2) {
                 e.preventDefault();
+                const dist = Math.hypot(e.touches[0].pageX - e.touches[1].pageX, e.touches[0].pageY - e.touches[1].pageY);
+                const zoom = dist / startDist;
+                const newScale = Math.min(Math.max(1, scale * zoom), 5); // 限制缩放 1-5 倍
+                const activeImg = slideItems[currentSlide].querySelector('img');
+                activeImg.style.transform = `scale(${newScale})`;
             }
         }, { passive: false });
 
         slideshow.addEventListener('touchend', e => {
-            let touchEndX = e.changedTouches[0].clientX;
-            let diffX = touchEndX - touchStartX;
-            
-            if (Math.abs(diffX) > 50) { // 滑动距离阀值
-                if (diffX > 0) prevSlide(); // 右滑 -> 上一张
-                else nextSlide();           // 左滑 -> 下一张
-            } else {
-                startAutoPlay(); // 没滑够距离，恢复自动播放
+            if (e.touches.length === 0) {
+                const activeImg = slideItems[currentSlide].querySelector('img');
+                const currentTransform = activeImg.style.transform;
+                const match = currentTransform.match(/scale\(([^)]+)\)/);
+                scale = match ? parseFloat(match[1]) : 1;
+
+                if (scale <= 1.05) {
+                    let diffX = e.changedTouches[0].clientX - touchStartX;
+                    if (Math.abs(diffX) > 60) {
+                        diffX > 0 ? prevSlide() : nextSlide();
+                    } else {
+                        startAutoPlay();
+                    }
+                }
             }
+        });
+
+        // 4. 电脑滚轮缩放支持
+        slideshow.addEventListener('wheel', e => {
+            e.preventDefault();
+            const delta = e.deltaY > 0 ? -0.1 : 0.1;
+            scale = Math.min(Math.max(1, scale + delta), 5);
+            const activeImg = slideItems[currentSlide].querySelector('img');
+            activeImg.style.transform = `scale(${scale})`;
+            stopAutoPlay();
+            if (scale <= 1) startAutoPlay();
         }, { passive: false });
 
-        // --- 电脑键盘支持 ---
+        // 键盘支持
         window.addEventListener('keydown', e => {
             if (e.key === "ArrowLeft") prevSlide();
             if (e.key === "ArrowRight") nextSlide();
