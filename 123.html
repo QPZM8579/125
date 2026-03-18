@@ -1,0 +1,190 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>极简滑动轮播 - 瞬间切换</title>
+    <style>
+        :root {
+            --display-time: 5000ms;
+        }
+        body, html {
+            margin: 0; padding: 0; width: 100%; height: 100%;
+            overflow: hidden; background: #000;
+            font-family: "SF Pro Display", -apple-system, sans-serif;
+        }
+
+        .slideshow {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            touch-action: pan-y;
+        }
+
+        /* 图片样式：去掉 opacity 和 transition */
+        .slide {
+            width: 100%; height: 100%;
+            object-fit: contain;
+            position: absolute;
+            top: 0; left: 0;
+            display: none; /* 默认不显示 */
+            z-index: 1;
+        }
+        .slide.active { 
+            display: block; /* 激活时直接显示，无动画 */
+            z-index: 2; 
+        }
+
+        /* 磨砂计数器 */
+        .counter {
+            position: absolute;
+            top: env(safe-area-inset-top, 20px);
+            right: 20px;
+            padding: 6px 14px;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            color: #fff;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 500;
+            z-index: 30;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* 进度条 */
+        .progress-bar {
+            position: absolute;
+            bottom: 0; left: 0;
+            height: 3px;
+            background: rgba(255, 255, 255, 0.6);
+            width: 0%;
+            z-index: 20;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="slideshow" id="mainShow">
+        <div class="counter" id="counter">1 / 0</div>
+        <div class="progress-bar" id="progressBar"></div>
+    </div>
+
+    <script>
+        const imageUrls = [
+              "https://xxximg.dpdns.org/img/2026/03/chyu (30).{ext}",
+              "https://xxximg.dpdns.org/img/2026/03/chyu (29).{ext}",
+              "https://xxximg.dpdns.org/img/2026/03/chyu (28).{ext}",
+              "https://xxximg.dpdns.org/img/2026/03/chyu (27).{ext}",
+              "https://xxximg.dpdns.org/img/2026/03/chyu (26).{ext}",
+              "https://xxximg.dpdns.org/img/2026/03/chyu (25).{ext}",
+              "https://xxximg.dpdns.org/img/2026/03/chyu (24).{ext}",
+              "https://xxximg.dpdns.org/img/2026/03/chyu (23).{ext}",
+              "https://xxximg.dpdns.org/img/2026/03/chyu (22).{ext}",
+              "https://xxximg.dpdns.org/img/2026/03/chyu (21).{ext}",
+              "https://xxximg.dpdns.org/img/2026/03/chyu (20).{ext}",
+              "https://xxximg.dpdns.org/img/2026/03/chyu (19).{ext}",
+              "https://xxximg.dpdns.org/img/2026/03/chyu (18).{ext}",
+              "https://xxximg.dpdns.org/img/2026/03/chyu (17).{ext}",
+              "https://xxximg.dpdns.org/img/2026/03/chyu (16).{ext}",
+              "https://xxximg.dpdns.org/img/2026/03/chyu (15).{ext}",
+              "https://xxximg.dpdns.org/img/2026/03/chyu (14).{ext}",
+              "https://xxximg.dpdns.org/img/2026/03/chyu (13).{ext}",
+              "https://xxximg.dpdns.org/img/2026/03/chyu (12).{ext}",
+              "https://xxximg.dpdns.org/img/2026/03/chyu (11).{ext}",
+              "https://xxximg.dpdns.org/img/2026/03/chyu (10).{ext}",
+              "https://xxximg.dpdns.org/img/2026/03/chyu (9).{ext}",
+              "https://xxximg.dpdns.org/img/2026/03/chyu (8).{ext}",
+              "https://xxximg.dpdns.org/img/2026/03/chyu (7).{ext}",
+              "https://xxximg.dpdns.org/img/2026/03/chyu (6).{ext}",
+              "https://xxximg.dpdns.org/img/2026/03/chyu (5).{ext}",
+              "https://xxximg.dpdns.org/img/2026/03/chyu (4).{ext}",
+              "https://xxximg.dpdns.org/img/2026/03/chyu (3).{ext}",
+              "https://xxximg.dpdns.org/img/2026/03/chyu (2).{ext}",
+              "https://xxximg.dpdns.org/img/2026/03/chyu (1).{ext}"
+        ];
+
+        const slideshow = document.getElementById('mainShow');
+        const progressBar = document.getElementById('progressBar');
+        const counter = document.getElementById('counter');
+        let currentSlide = 0;
+        let timer = null;
+        let progressInterval = null;
+        const duration = 3000; 
+
+        imageUrls.forEach((url, index) => {
+            const img = document.createElement('img');
+            img.src = url;
+            img.className = 'slide' + (index === 0 ? ' active' : '');
+            slideshow.appendChild(img);
+        });
+
+        const slides = document.querySelectorAll('.slide');
+        const totalSlides = slides.length;
+
+        function updateUI() {
+            slides.forEach(s => s.classList.remove('active'));
+            slides[currentSlide].classList.add('active');
+            counter.innerText = `${currentSlide + 1} / ${totalSlides}`;
+            resetProgressBar();
+            startAutoPlay();
+        }
+
+        function nextSlide() {
+            currentSlide = (currentSlide + 1) % totalSlides;
+            updateUI();
+        }
+
+        function prevSlide() {
+            currentSlide = (currentSlide - 1 + totalSlides) % totalSlides;
+            updateUI();
+        }
+
+        function startAutoPlay() {
+            stopAutoPlay();
+            timer = setInterval(nextSlide, duration);
+            let start = Date.now();
+            progressInterval = setInterval(() => {
+                let elapsed = Date.now() - start;
+                progressBar.style.width = Math.min((elapsed / duration) * 100, 100) + '%';
+            }, 50);
+        }
+
+        function stopAutoPlay() {
+            if(timer) clearInterval(timer);
+            if(progressInterval) clearInterval(progressInterval);
+        }
+
+        function resetProgressBar() {
+            progressBar.style.width = '0%';
+        }
+
+        // 键盘控制
+        window.addEventListener('keydown', e => {
+            if (e.key === "ArrowLeft") prevSlide();
+            if (e.key === "ArrowRight") nextSlide();
+        });
+
+        // 触摸滑动
+        let touchStartX = 0;
+        slideshow.addEventListener('touchstart', e => {
+            touchStartX = e.changedTouches.screenX;
+            stopAutoPlay();
+        }, {passive: true});
+
+        slideshow.addEventListener('touchend', e => {
+            let touchEndX = e.changedTouches.screenX;
+            let diff = touchEndX - touchStartX;
+            if (Math.abs(diff) > 50) {
+                diff > 0 ? prevSlide() : nextSlide();
+            } else {
+                startAutoPlay();
+            }
+        }, {passive: true});
+
+        // 初始化
+        counter.innerText = `1 / ${totalSlides}`;
+        startAutoPlay();
+    </script>
+</body>
+</html>
