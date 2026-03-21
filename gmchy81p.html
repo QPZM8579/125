@@ -1,0 +1,188 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>图片轮播</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background: #000;
+        }
+        .slideshow {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .slide {
+            display: none;
+            width: 100%;
+            height: 100%;
+            object-fit: contain; /* 保持图片像素不变，完整显示 */
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+        .slide.active {
+            display: block;
+        }
+        .arrow {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 20px;
+            color: rgba(255, 255, 255, 0.25); /* 白色，30%透明度 */
+            background: none;
+            cursor: pointer;
+            user-select: none;
+        }
+        .left-arrow {
+            left: 20px;
+        }
+        .right-arrow {
+            right: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="slideshow">
+        <!-- 示例图片，可替换为你的图片路径 -->
+<img class="slide" src="https://xxximg.dpdns.org/img/2026/03/gmchy (1).{ext}"/>
+<img class="slide" src="https://xxximg.dpdns.org/img/2026/03/gmchy (2).{ext}"/>
+<img class="slide" src="https://xxximg.dpdns.org/img/2026/03/gmchy (3).{ext}"/>
+<img class="slide" src="https://xxximg.dpdns.org/img/2026/03/gmchy (4).{ext}"/>
+<img class="slide" src="https://xxximg.dpdns.org/img/2026/03/gmchy (5).{ext}"/>
+<img class="slide" src="https://xxximg.dpdns.org/img/2026/03/gmchy (6).{ext}"/>
+<img class="slide" src="https://xxximg.dpdns.org/img/2026/03/gmchy (7).{ext}"/>
+<img class="slide" src="https://xxximg.dpdns.org/img/2026/03/gmchy (8).{ext}"/>
+<img class="slide" src="https://xxximg.dpdns.org/img/2026/03/gmchy (9).{ext}"/>
+<img class="slide" src="https://xxximg.dpdns.org/img/2026/03/gmchy (10).{ext}"/>
+<img class="slide" src="https://xxximg.dpdns.org/img/2026/03/gmchy (11).{ext}"/>
+<img class="slide" src="https://xxximg.dpdns.org/img/2026/03/gmchy (12).{ext}"/>
+<img class="slide" src="https://xxximg.dpdns.org/img/2026/03/gmchy (13).{ext}"/>
+<img class="slide" src="https://xxximg.dpdns.org/img/2026/03/gmchy (14).{ext}"/>
+<img class="slide" src="https://xxximg.dpdns.org/img/2026/03/gmchy (15).{ext}"/>
+<img class="slide" src="https://xxximg.dpdns.org/img/2026/03/gmchy (16).{ext}"/>
+<img class="slide" src="https://xxximg.dpdns.org/img/2026/03/gmchy (17).{ext}"/>
+<img class="slide" src="https://xxximg.dpdns.org/img/2026/03/gmchy (18).{ext}"/>
+<img class="slide" src="https://xxximg.dpdns.org/img/2026/03/gmchy (19).{ext}"/>
+<img class="slide" src="https://xxximg.dpdns.org/img/2026/03/gmchy (20).{ext}"/>
+<img class="slide" src="https://xxximg.dpdns.org/img/2026/03/gmchy (21).{ext}"/>
+<img class="slide" src="https://xxximg.dpdns.org/img/2026/03/gmchy (22).{ext}"/>
+<img class="slide" src="https://xxximg.dpdns.org/img/2026/03/gmchy (23).{ext}"/>
+<img class="slide" src="https://xxximg.dpdns.org/img/2026/03/gmchy (24).{ext}"/>
+<img class="slide" src="https://xxximg.dpdns.org/img/2026/03/gmchy (25).{ext}"/>
+<img class="slide" src="https://xxximg.dpdns.org/img/2026/03/gmchy (26).{ext}"/>
+<img class="slide" src="https://xxximg.dpdns.org/img/2026/03/gmchy (27).{ext}"/>
+<img class="slide" src="https://xxximg.dpdns.org/img/2026/03/gmchy (28).{ext}"/>
+<img class="slide" src="https://xxximg.dpdns.org/img/2026/03/gmchy (29).{ext}"/>
+<img class="slide" src="https://xxximg.dpdns.org/img/2026/03/gmchy (30).{ext}"/>
+<img class="slide" src="https://xxximg.dpdns.org/img/2026/03/gmchy (31).{ext}"/>
+<img class="slide" src="https://xxximg.dpdns.org/img/2026/03/gmchy (32).{ext}"/>
+<img class="slide" src="https://xxximg.dpdns.org/img/2026/03/gmchy (33).{ext}"/>
+<img class="slide" src="https://xxximg.dpdns.org/img/2026/03/gmchy (34).{ext}"/>
+<img class="slide" src="https://xxximg.dpdns.org/img/2026/03/gmchy (35).{ext}"/>
+<img class="slide" src="https://xxximg.dpdns.org/img/2026/03/gmchy (36).{ext}"/>
+<img class="slide" src="https://xxximg.dpdns.org/img/2026/03/gmchy (37).{ext}"/>
+<img class="slide" src="https://xxximg.dpdns.org/img/2026/03/gmchy (38).{ext}"/>
+<img class="slide" src="https://xxximg.dpdns.org/img/2026/03/gmchy (39).{ext}"/>
+<img class="slide" src="https://xxximg.dpdns.org/img/2026/03/gmchy (40).{ext}"/>
+<img class="slide" src="https://xxximg.dpdns.org/img/2026/03/gmchy (41).{ext}"/>
+<img class="slide" src="https://xxximg.dpdns.org/img/2026/03/gmchy (42).{ext}"/>
+<img class="slide" src="https://xxximg.dpdns.org/img/2026/03/gmchy (43).{ext}"/>
+<img class="slide" src="https://xxximg.dpdns.org/img/2026/03/gmchy (44).{ext}"/>
+<img class="slide" src="https://xxximg.dpdns.org/img/2026/03/gmchy (45).{ext}"/>
+<img class="slide" src="https://xxximg.dpdns.org/img/2026/03/gmchy (46).{ext}"/>
+<img class="slide" src="https://xxximg.dpdns.org/img/2026/03/gmchy (47).{ext}"/>
+<img class="slide" src="https://xxximg.dpdns.org/img/2026/03/gmchy (48).{ext}"/>
+<img class="slide" src="https://xxximg.dpdns.org/img/2026/03/gmchy (49).{ext}"/>
+<img class="slide" src="https://xxximg.dpdns.org/img/2026/03/gmchy (50).{ext}"/>
+<img class="slide" src="https://xxximg.dpdns.org/img/2026/03/gmchy (51).{ext}"/>
+<img class="slide" src="https://xxximg.dpdns.org/img/2026/03/gmchy (52).{ext}"/>
+<img class="slide" src="https://xxximg.dpdns.org/img/2026/03/gmchy (53).{ext}"/>
+<img class="slide" src="https://xxximg.dpdns.org/img/2026/03/gmchy (54).{ext}"/>
+<img class="slide" src="https://xxximg.dpdns.org/img/2026/03/gmchy (55).{ext}"/>
+<img class="slide" src="https://xxximg.dpdns.org/img/2026/03/gmchy (56).{ext}"/>
+<img class="slide" src="https://xxximg.dpdns.org/img/2026/03/gmchy (57).{ext}"/>
+<img class="slide" src="https://xxximg.dpdns.org/img/2026/03/gmchy (58).{ext}"/>
+<img class="slide" src="https://xxximg.dpdns.org/img/2026/03/gmchy (59).{ext}"/>
+<img class="slide" src="https://xxximg.dpdns.org/img/2026/03/gmchy (60).{ext}"/>
+<img class="slide" src="https://xxximg.dpdns.org/img/2026/03/gmchy (61).{ext}"/>
+<img class="slide" src="https://xxximg.dpdns.org/img/2026/03/gmchy (62).{ext}"/>
+<img class="slide" src="https://xxximg.dpdns.org/img/2026/03/gmchy (63).{ext}"/>
+<img class="slide" src="https://xxximg.dpdns.org/img/2026/03/gmchy (64).{ext}"/>
+<img class="slide" src="https://xxximg.dpdns.org/img/2026/03/gmchy (65).{ext}"/>
+<img class="slide" src="https://xxximg.dpdns.org/img/2026/03/gmchy (66).{ext}"/>
+<img class="slide" src="https://xxximg.dpdns.org/img/2026/03/gmchy (67).{ext}"/>
+<img class="slide" src="https://xxximg.dpdns.org/img/2026/03/gmchy (68).{ext}"/>
+<img class="slide" src="https://xxximg.dpdns.org/img/2026/03/gmchy (69).{ext}"/>
+<img class="slide" src="https://xxximg.dpdns.org/img/2026/03/gmchy (70).{ext}"/>
+<img class="slide" src="https://xxximg.dpdns.org/img/2026/03/gmchy (71).{ext}"/>
+<img class="slide" src="https://xxximg.dpdns.org/img/2026/03/gmchy (72).{ext}"/>
+<img class="slide" src="https://xxximg.dpdns.org/img/2026/03/gmchy (73).{ext}"/>
+<img class="slide" src="https://xxximg.dpdns.org/img/2026/03/gmchy (74).{ext}"/>
+<img class="slide" src="https://xxximg.dpdns.org/img/2026/03/gmchy (75).{ext}"/>
+<img class="slide" src="https://xxximg.dpdns.org/img/2026/03/gmchy (76).{ext}"/>
+<img class="slide" src="https://xxximg.dpdns.org/img/2026/03/gmchy (77).{ext}"/>
+<img class="slide" src="https://xxximg.dpdns.org/img/2026/03/gmchy (78).{ext}"/>
+<img class="slide" src="https://xxximg.dpdns.org/img/2026/03/gmchy (79).{ext}"/>
+<img class="slide" src="https://xxximg.dpdns.org/img/2026/03/gmchy (80).{ext}"/>
+<img class="slide" src="https://xxximg.dpdns.org/img/2026/03/gmchy (81).{ext}"/>
+        <div class="arrow left-arrow">〈</div>
+        <div class="arrow right-arrow">〉</div>
+    </div>
+
+    <script>
+        const slides = document.querySelectorAll('.slide');
+        const slideshow = document.querySelector('.slideshow');
+        let currentSlide = 0;
+
+        // 显示当前幻灯片
+        function showSlide(index) {
+            slides.forEach((slide, i) => {
+                slide.classList.toggle('active', i === index);
+            });
+        }
+
+        // 下一张
+        function nextSlide() {
+            currentSlide = (currentSlide + 1) % slides.length;
+            showSlide(currentSlide);
+        }
+
+        // 上一张
+        function prevSlide() {
+            currentSlide = (currentSlide - 1 + slides.length) % slides.length;
+            showSlide(currentSlide);
+        }
+
+        // 自动轮播
+        let autoSlide = setInterval(nextSlide, 5000);
+
+        // 点击事件
+        slideshow.addEventListener('click', (e) => {
+            const rect = slideshow.getBoundingClientRect();
+            const clickX = e.clientX - rect.left;
+
+            // 重置自动轮播计时器
+            clearInterval(autoSlide);
+            autoSlide = setInterval(nextSlide, 5000);
+
+            // 判断点击区域
+            if (clickX < rect.width / 2) {
+                prevSlide(); // 点击左半边，上一张
+            } else {
+                nextSlide(); // 点击右半边，下一张
+            }
+        });
+
+        // 初始化显示第一张
+        showSlide(currentSlide);
+    </script>
+</body>
+</html>

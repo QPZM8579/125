@@ -1,0 +1,223 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>极简缩放轮播</title>
+    <style>
+        body, html {
+            margin: 0; padding: 0; width: 100%; height: 100%;
+            overflow: hidden; background: #000;
+            font-family: -apple-system, sans-serif;
+        }
+        .slideshow {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            touch-action: none; /* 必须禁用，否则双指会触发浏览器缩放 */
+        }
+        .slide-item {
+            width: 100%; height: 100%;
+            position: absolute;
+            top: 0; left: 0;
+            display: none; /* 默认隐藏 */
+            align-items: center;
+            justify-content: center;
+            z-index: 1;
+        }
+        .slide-item.active {
+            display: flex;
+            z-index: 2;
+        }
+        .slide-item img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+            transform-origin: center center;
+            transition: transform 0.1s ease-out; /* 缩放时的微弱平滑感 */
+        }
+        .counter {
+            position: absolute;
+            top: env(safe-area-inset-top, 20px);
+            right: 20px;
+            padding: 6px 14px;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            color: #fff;
+            border-radius: 20px;
+            font-size: 14px;
+            z-index: 30;
+        }
+        .progress-bar {
+            position: absolute;
+            bottom: 0; left: 0;
+            height: 3px;
+            background: rgba(255, 255, 255, 0.6);
+            width: 0%;
+            z-index: 20;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="slideshow" id="mainShow">
+        <div class="counter" id="counter">1 / 0</div>
+        <div class="progress-bar" id="progressBar"></div>
+    </div>
+
+    <script>
+        const imageUrls = [
+              "https://xxximg.dpdns.org/img/2026/03/chyu (30).{ext}",
+              "https://xxximg.dpdns.org/img/2026/03/chyu (29).{ext}",
+              "https://xxximg.dpdns.org/img/2026/03/chyu (28).{ext}",
+              "https://xxximg.dpdns.org/img/2026/03/chyu (27).{ext}",
+              "https://xxximg.dpdns.org/img/2026/03/chyu (26).{ext}",
+              "https://xxximg.dpdns.org/img/2026/03/chyu (25).{ext}",
+              "https://xxximg.dpdns.org/img/2026/03/chyu (24).{ext}",
+              "https://xxximg.dpdns.org/img/2026/03/chyu (23).{ext}",
+              "https://xxximg.dpdns.org/img/2026/03/chyu (22).{ext}",
+              "https://xxximg.dpdns.org/img/2026/03/chyu (21).{ext}",
+              "https://xxximg.dpdns.org/img/2026/03/chyu (20).{ext}",
+              "https://xxximg.dpdns.org/img/2026/03/chyu (19).{ext}",
+              "https://xxximg.dpdns.org/img/2026/03/chyu (18).{ext}",
+              "https://xxximg.dpdns.org/img/2026/03/chyu (17).{ext}",
+              "https://xxximg.dpdns.org/img/2026/03/chyu (16).{ext}",
+              "https://xxximg.dpdns.org/img/2026/03/chyu (15).{ext}",
+              "https://xxximg.dpdns.org/img/2026/03/chyu (14).{ext}",
+              "https://xxximg.dpdns.org/img/2026/03/chyu (13).{ext}",
+              "https://xxximg.dpdns.org/img/2026/03/chyu (12).{ext}",
+              "https://xxximg.dpdns.org/img/2026/03/chyu (11).{ext}",
+              "https://xxximg.dpdns.org/img/2026/03/chyu (10).{ext}",
+              "https://xxximg.dpdns.org/img/2026/03/chyu (9).{ext}",
+              "https://xxximg.dpdns.org/img/2026/03/chyu (8).{ext}",
+              "https://xxximg.dpdns.org/img/2026/03/chyu (7).{ext}",
+              "https://xxximg.dpdns.org/img/2026/03/chyu (6).{ext}",
+              "https://xxximg.dpdns.org/img/2026/03/chyu (5).{ext}",
+              "https://xxximg.dpdns.org/img/2026/03/chyu (4).{ext}",
+              "https://xxximg.dpdns.org/img/2026/03/chyu (3).{ext}",
+              "https://xxximg.dpdns.org/img/2026/03/chyu (2).{ext}",
+              "https://xxximg.dpdns.org/img/2026/03/chyu (1).{ext}"
+        ];
+
+        const slideshow = document.getElementById('mainShow');
+        const progressBar = document.getElementById('progressBar');
+        const counter = document.getElementById('counter');
+        
+        let currentSlide = 0;
+        let timer = null;
+        let progressInterval = null;
+        let scale = 1; // 当前缩放比例
+        const duration = 3000; 
+
+        // 1. 初始化图片
+        imageUrls.forEach((url, index) => {
+            const div = document.createElement('div');
+            div.className = 'slide-item' + (index === 0 ? ' active' : '');
+            const img = document.createElement('img');
+            img.src = url;
+            div.appendChild(img);
+            slideshow.appendChild(div);
+        });
+
+        const slideItems = document.querySelectorAll('.slide-item');
+        const totalSlides = slideItems.length;
+
+        function updateUI() {
+            slideItems.forEach((item, i) => {
+                item.classList.toggle('active', i === currentSlide);
+                // 切换时重置上一张图的缩放
+                if (i !== currentSlide) {
+                    item.querySelector('img').style.transform = `scale(1)`;
+                }
+            });
+            scale = 1; // 重置缩放倍数
+            counter.innerText = `${currentSlide + 1} / ${totalSlides}`;
+            resetProgressBar();
+            startAutoPlay();
+        }
+
+        function nextSlide() { currentSlide = (currentSlide + 1) % totalSlides; updateUI(); }
+        function prevSlide() { currentSlide = (currentSlide - 1 + totalSlides) % totalSlides; updateUI(); }
+
+        // 2. 自动播放
+        function startAutoPlay() {
+            stopAutoPlay();
+            if (scale > 1.05) return; // 放大状态下不自动轮播
+            timer = setInterval(nextSlide, duration);
+            let start = Date.now();
+            progressInterval = setInterval(() => {
+                let elapsed = Date.now() - start;
+                progressBar.style.width = Math.min((elapsed / duration) * 100, 100) + '%';
+            }, 50);
+        }
+
+        function stopAutoPlay() { clearInterval(timer); clearInterval(progressInterval); }
+        function resetProgressBar() { progressBar.style.width = '0%'; }
+
+        // 3. 触摸逻辑（区分滑动切换和双指缩放）
+        let startDist = 0;
+        let touchStartX = 0;
+
+        slideshow.addEventListener('touchstart', e => {
+            stopAutoPlay();
+            if (e.touches.length === 1) {
+                touchStartX = e.touches[0].clientX;
+            } else if (e.touches.length === 2) {
+                // 计算两指间距
+                startDist = Math.hypot(e.touches[0].pageX - e.touches[1].pageX, e.touches[0].pageY - e.touches[1].pageY);
+            }
+        }, { passive: false });
+
+        slideshow.addEventListener('touchmove', e => {
+            if (e.touches.length === 2) {
+                e.preventDefault();
+                const dist = Math.hypot(e.touches[0].pageX - e.touches[1].pageX, e.touches[0].pageY - e.touches[1].pageY);
+                const zoom = dist / startDist;
+                const newScale = Math.min(Math.max(1, scale * zoom), 5); // 限制缩放 1-5 倍
+                const activeImg = slideItems[currentSlide].querySelector('img');
+                activeImg.style.transform = `scale(${newScale})`;
+            }
+        }, { passive: false });
+
+        slideshow.addEventListener('touchend', e => {
+            if (e.touches.length === 0) {
+                const activeImg = slideItems[currentSlide].querySelector('img');
+                const currentTransform = activeImg.style.transform;
+                const match = currentTransform.match(/scale\(([^)]+)\)/);
+                scale = match ? parseFloat(match[1]) : 1;
+
+                if (scale <= 1.05) {
+                    let diffX = e.changedTouches[0].clientX - touchStartX;
+                    if (Math.abs(diffX) > 60) {
+                        diffX > 0 ? prevSlide() : nextSlide();
+                    } else {
+                        startAutoPlay();
+                    }
+                }
+            }
+        });
+
+        // 4. 电脑滚轮缩放支持
+        slideshow.addEventListener('wheel', e => {
+            e.preventDefault();
+            const delta = e.deltaY > 0 ? -0.1 : 0.1;
+            scale = Math.min(Math.max(1, scale + delta), 5);
+            const activeImg = slideItems[currentSlide].querySelector('img');
+            activeImg.style.transform = `scale(${scale})`;
+            stopAutoPlay();
+            if (scale <= 1) startAutoPlay();
+        }, { passive: false });
+
+        // 键盘支持
+        window.addEventListener('keydown', e => {
+            if (e.key === "ArrowLeft") prevSlide();
+            if (e.key === "ArrowRight") nextSlide();
+        });
+
+        // 初始化
+        counter.innerText = `1 / ${totalSlides}`;
+        startAutoPlay();
+    </script>
+</body>
+</html>
