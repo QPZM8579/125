@@ -1,0 +1,166 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>图片轮播</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background: #000;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        }
+        .slideshow {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .slide {
+            display: none;
+            width: 100%;
+            height: 100%;
+            object-fit: contain; /* 保持原比例显示 */
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+        .slide.active {
+            display: block;
+        }
+        /* 页码样式 */
+        .counter {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            color: rgba(255, 255, 255, 0.8);
+            background: rgba(0, 0, 0, 0.4);
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 14px;
+            z-index: 10;
+            pointer-events: none; /* 防止点击页码触发切图 */
+        }
+        .arrow {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 30px;
+            color: rgba(255, 255, 255, 0.3);
+            background: none;
+            cursor: pointer;
+            user-select: none;
+            z-index: 5;
+        }
+        .left-arrow { left: 25px; }
+        .right-arrow { right: 25px; }
+    </style>
+</head>
+<body>
+
+    <div class="slideshow">
+        <!-- 图片列表 -->
+              <img class="slide" src="https://snapshot.4everland.link/ipfs/bafkreid3thdahifuv2oka3hxdwspweq5hpjspvipdweu2uhpnozrinvphq?filename=gmiyu%20(1).jpg"/>
+              <img class="slide" src="https://snapshot.4everland.link/ipfs/bafkreiaizzrgnaep26haihsic3zangbugkvzifxedy3mjxpbctsrpxkxeu?filename=gmiyu%20(2).jpg"/>
+              <img class="slide" src="https://snapshot.4everland.link/ipfs/bafkreib7qzs6jrjsfhdqvu7bbylctcbm5czyvnsnmylnzfdjabdze2m64q?filename=gmiyu%20(3).jpg"/>
+              <img class="slide" src="https://snapshot.4everland.link/ipfs/bafkreibugfjnwf33ridxo7vvr34p2cayb22vh42ikydvth4ohuv7zj6wmu?filename=gmiyu%20(4).jpg"/>
+              <img class="slide" src="https://snapshot.4everland.link/ipfs/bafkreiaeannsza4czk5pji7vpnuwrfthpihmfrijob52qtklcnvrktmf54?filename=gmiyu%20(5).jpg"/>
+              <img class="slide" src="https://snapshot.4everland.link/ipfs/bafkreid5ixavnt6ab4ehhznp62ae3v3eo45qxinwo7at5myxwpgqtchk2a?filename=gmiyu%20(6).jpg"/>
+              <img class="slide" src="https://snapshot.4everland.link/ipfs/bafkreihrzg6ztxzdumfklcnp4cya5kvwxopjygefkikq7ouruwsqcm5tz4?filename=gmiyu%20(7).jpg"/>
+              <img class="slide" src="https://snapshot.4everland.link/ipfs/bafkreibfy74t2eijufa57cum55hrjaozrc5kdfsls6rpydgszf4csylqhq?filename=gmiyu%20(8).jpg"/>
+              <img class="slide" src="https://snapshot.4everland.link/ipfs/bafkreiddqouvdfpuxperwxaxbyitr4s5uyfzuxdhhduadvfsiesa5umvwm?filename=gmiyu%20(9).jpg"/>
+              <img class="slide" src="https://snapshot.4everland.link/ipfs/bafkreibvx2hu27tgpwmxddgjibjgaq4vne2zbbzqy2dvtk4vu5zdwiqy3e?filename=gmiyu%20(10).jpg"/>
+              <img class="slide" src="https://snapshot.4everland.link/ipfs/bafkreid4znsfdkdpmfottcrirrp2fvafkewdromqqao7e24wzlcpr2brku?filename=gmiyu%20(11).jpg"/>
+              <img class="slide" src="https://snapshot.4everland.link/ipfs/bafkreifty6vla62zzxooygay2wzwegoes3wdks522zzzx5vshsxeoesn6i?filename=gmiyu%20(12).jpg"/>
+              <img class="slide" src="https://snapshot.4everland.link/ipfs/bafkreigqg4s5a7bqy67vyc7g35cjdclxv7adqcwb4ebjoi7rbwo5757ndy?filename=gmiyu%20(13).jpg"/>
+              <img class="slide" src="https://snapshot.4everland.link/ipfs/bafkreiecruvsc4nm4kek2n6msod7rbjlrfskgfukwnfddlh5klzz7wsfmu?filename=gmiyu%20(14).jpg"/>
+              <img class="slide" src="https://snapshot.4everland.link/ipfs/bafkreidxn5mnxzk3bfaiikueqjp7friw6trhxboeycxxppnd24ynnzlkpy?filename=gmiyu%20(15).jpg"/>
+              <img class="slide" src="https://snapshot.4everland.link/ipfs/bafkreif7nzau4bc2uj4uhx57q5oanzdvnhs6coegrnfcjd5wvkrdiobogi?filename=gmiyu%20(16).jpg"/>
+              <img class="slide" src="https://snapshot.4everland.link/ipfs/bafkreifwg5vyvuwih7item3st3blgniw4yvslvm247fgp7mbtw4p3olpte?filename=gmiyu%20(17).jpg"/>
+              <img class="slide" src="https://snapshot.4everland.link/ipfs/bafkreigrfteyaxn7wfhxigopez5vkitzw6ilrxwqk5icewncbjerl6sktu?filename=gmiyu%20(18).jpg"/>
+              <img class="slide" src="https://snapshot.4everland.link/ipfs/bafkreicqq2su5wg6farpvlcpi35lx52zz4x7h25oz73iykz6wgrnyd5fre?filename=gmiyu%20(19).jpg"/>
+              <img class="slide" src="https://snapshot.4everland.link/ipfs/bafkreievnkswsck4uv3jc23uy3tkjzibvlf2tadkbhgnpk7re7zxq7rqmq?filename=gmiyu%20(20).jpg"/>
+              <img class="slide" src="https://snapshot.4everland.link/ipfs/bafkreihpiu5x2rw2ysw5lyevmp44ty7nv6qnqfwr4adswxqysufc22ezze?filename=gmiyu%20(21).jpg"/>
+              <img class="slide" src="https://snapshot.4everland.link/ipfs/bafkreig33snedfl5bt7jdckq3ngyshl2bvdho6b5mlmktqcmgi7orcgthq?filename=gmiyu%20(22).jpg"/>
+              <img class="slide" src="https://snapshot.4everland.link/ipfs/bafkreibxetts2zt3vt6fv4oi2yc7me53uc4t2b4lwwqjcyfnl2r5ibi62i?filename=gmiyu%20(23).jpg"/>
+              <img class="slide" src="https://snapshot.4everland.link/ipfs/bafkreibfeggfidk3l23yb4kptuzot2dkocliheniwxrytvhxzmzvy5powq?filename=gmiyu%20(24).jpg"/>
+              <img class="slide" src="https://snapshot.4everland.link/ipfs/bafkreihqriq4564o77oa576ajjzazc4ryvvabqm3fek2fqc6lscfs5quky?filename=gmiyu%20(25).jpg"/>
+              <img class="slide" src="https://snapshot.4everland.link/ipfs/bafkreidv4tmeafurjgifpmamfqpuuzbfzljdqzrwg3pij3ltdmjncw2prq?filename=gmiyu%20(26).jpg"/>
+              <img class="slide" src="https://snapshot.4everland.link/ipfs/bafkreic6edxvmnc2wfb5x5vtnpodiyv5n6et5vu55hc7htfaavpfgericu?filename=gmiyu%20(27).jpg"/>
+              <img class="slide" src="https://snapshot.4everland.link/ipfs/bafkreidif355if4vwu7x5wbvccvvndrov6v53a3e5egdwpobdohvwyw6ri?filename=gmiyu%20(28).jpg"/>
+              <img class="slide" src="https://snapshot.4everland.link/ipfs/bafkreic23yloxctu6jct3spttgjoilvvrlfgeghcvtewkpqlmombxyeefq?filename=gmiyu%20(29).jpg"/>
+
+
+        <!-- 页码显示器 -->
+        <div class="counter" id="pageCounter">1 / 3</div>
+
+        <!-- 左右箭头 -->
+        <div class="arrow left-arrow">〈</div>
+        <div class="arrow right-arrow">〉</div>
+    </div>
+
+    <script>
+        const slides = document.querySelectorAll('.slide');
+        const slideshow = document.querySelector('.slideshow');
+        const counter = document.getElementById('pageCounter');
+        let currentSlide = 0;
+
+        // 更新显示（图片和页码）
+        function updateDisplay(index) {
+            slides.forEach((slide, i) => {
+                slide.classList.toggle('active', i === index);
+            });
+            // 更新页码文字：当前序号 / 总数
+            counter.textContent = `${index + 1} / ${slides.length}`;
+        }
+
+        // 下一张
+        function nextSlide() {
+            currentSlide = (currentSlide + 1) % slides.length;
+            updateDisplay(currentSlide);
+        }
+
+        // 上一张
+        function prevSlide() {
+            currentSlide = (currentSlide - 1 + slides.length) % slides.length;
+            updateDisplay(currentSlide);
+        }
+
+        // 自动轮播计时器
+        let autoSlide = setInterval(nextSlide, 3000);
+
+        // 重置计时器函数
+        function resetTimer() {
+            clearInterval(autoSlide);
+            autoSlide = setInterval(nextSlide, 3000);
+        }
+
+        // 全屏点击切换逻辑
+        slideshow.addEventListener('click', (e) => {
+            const rect = slideshow.getBoundingClientRect();
+            const clickX = e.clientX - rect.left;
+
+            resetTimer();
+
+            if (clickX < rect.width / 2) {
+                prevSlide(); // 点击左半边
+            } else {
+                nextSlide(); // 点击右半边
+            }
+        });
+
+        // 键盘支持
+        document.addEventListener('keydown', (e) => {
+            if (e.key === "ArrowLeft") { resetTimer(); prevSlide(); }
+            if (e.key === "ArrowRight") { resetTimer(); nextSlide(); }
+        });
+
+        // 初始运行一次
+        updateDisplay(currentSlide);
+    </script>
+</body>
+</html>
