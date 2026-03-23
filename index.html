@@ -1,107 +1,184 @@
 ﻿<!DOCTYPE html>
-<html>
+<html lang="zh-CN">
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>美图墙轮播 </title>
+    <title>带标题的精致画廊</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { background: #f0f2f5; font-family: "Microsoft YaHei", sans-serif; display: flex; justify-content: center; padding: 20px; }
-        
-        .grid-container {
-            display: grid;
-            /* 竖向长方形建议最小宽度 160px-180px，排列更紧凑好看 */
-            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-            gap: 12px;
-            max-width: 1100px;
-            width: 100%;
+        * { box-sizing: border-box; }
+        body { 
+            font-family: -apple-system, "Helvetica Neue", sans-serif; 
+            background: #f8f9fa; margin: 0; color: #2d3436; 
         }
-        
-        .grid-item {
-            background: white; border-radius: 10px; overflow: hidden;
-            text-decoration: none; box-shadow: 0 2px 8px rgba(0,0,0,0.06); transition: 0.3s;
+
+        /* 1. 导航栏 */
+        .header {
+            background: #fff; border-bottom: 1px solid rgba(0,0,0,0.05);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.03); margin-bottom: 20px;
         }
-        
-        .grid-item:hover { transform: translateY(-5px); box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
-        
-        .image-box { 
-            width: 100%; 
-            /* 核心修改：设置为 3:4 竖版比例 */
-            aspect-ratio: 3 / 4; 
-            background: #e1e1e1; 
-            overflow: hidden; 
+        .nav-container {
+            max-width: 1100px; margin: 0 auto; display: flex;
+            justify-content: center; align-items: center; height: 60px;
         }
-        
-        .image-box img { 
-            width: 100%; height: 100%; 
-            object-fit: cover; /* 保证图片竖向填充，不拉伸 */
-            display: block; 
+        .nav-link {
+            text-decoration: none; color: #636e72; font-size: 15px;
+            font-weight: 500; margin: 0 15px; padding: 18px 0;
+            position: relative; transition: 0.3s;
         }
-        
-        .title { 
-            padding: 8px; text-align: center; font-size: 13px; color: #333; 
-            white-space: nowrap; overflow: hidden; text-overflow: ellipsis; 
+        .nav-link:hover, .nav-link.active { color: #007bff; }
+        .nav-link::after {
+            content: ''; position: absolute; bottom: 8px; left: 0;
+            width: 0; height: 3px; background: #007bff;
+            border-radius: 10px; transition: 0.3s;
         }
-        
-        @media (max-width: 480px) { 
-            .grid-container { grid-template-columns: repeat(2, 1fr); gap: 10px; } 
+        .nav-link:hover::after, .nav-link.active::after { width: 100%; }
+
+        /* 2. 图片展示网格 */
+        .main-content { padding: 0 10px; }
+        .gallery-grid { 
+            display: grid; gap: 12px; max-width: 1100px; margin: 0 auto;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); 
         }
+
+        /* 手机端 2 列 */
+        @media (max-width: 600px) {
+            .gallery-grid { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+        }
+
+        /* 3. 图片卡片 (4:3) + 标题遮罩 */
+        .card {
+            background: #fff; border-radius: 10px; overflow: hidden;
+            aspect-ratio: 3 / 4; position: relative;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            transition: transform 0.3s ease;
+        }
+        .card:hover { transform: translateY(-4px); }
+        .card a { display: block; width: 100%; height: 100%; text-decoration: none; }
+        .card img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+        /* 标题样式：黑色渐变遮罩 */
+        .title-overlay {
+            position: absolute; bottom: 0; left: 0; width: 100%;
+            padding: 20px 10px 10px;
+            background: linear-gradient(transparent, rgba(0,0,0,0.7));
+            color: #fff; font-size: 14px; font-weight: 500;
+            text-align: center; pointer-events: none; /* 穿透点击图片 */
+            white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+        }
+
+        /* 4. 分页控制 */
+        .pagination { 
+            display: flex; justify-content: center; align-items: center;
+            margin: 30px 0 50px; gap: 15px;
+        }
+        .page-btn {
+            background: #fff; border: 1px solid #dfe6e9; padding: 10px 20px;
+            border-radius: 50px; cursor: pointer; font-weight: 600; color: #636e72;
+        }
+        .page-btn:hover:not(:disabled) { background: #007bff; color: #fff; border-color: #007bff; }
+        .page-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+        .page-text { font-size: 14px; color: #999; }
     </style>
 </head>
 <body>
 
-<div class="grid-container" id="mainGrid"></div>
+    <header class="header">
+        <nav class="nav-container">
+            <a href="#" class="nav-link active">首页</a>
+            <a href="#" class="nav-link">视频</a>
+            <a href="#" class="nav-link">图片</a>
+            <a href="#" class="nav-link">其它</a>
+        </nav>
+    </header>
 
-<script>
-    // 在这里快速添加图片数据
-    const imageList = [
-        { title: "上床睡觉", img: "https://xxximg.dpdns.org/img/2026/03/xxxmarie.{ext}", url: "https://ipfsxxx.dpdns.org/marie58p.html" },
-        { title: "卷须", img: "https://xxximg.dpdns.org/img/2026/03/xxxqueen.{ext}", url: "https://ipfsxxx.dpdns.org/queen104p.html" },
-        { title: "梦", img: "https://xxximg.dpdns.org/img/2026/03/xxxalecia.{ext}", url: "https://ipfsxxx.dpdns.org/alecia25p.html" },
-        { title: "晨雨私拍一", img: "https://xxximg.dpdns.org/img/2026/03/xxxgomcy.%7Bext%7D", url: "https://ipfsxxx.dpdns.org/gomcy164p.html" },
-        { title: "晨雨私拍二", img: "https://xxximg.dpdns.org/img/2026/03/xxxgomcyu.%7Bext%7D", url: "https://ipfsxxx.dpdns.org/gomcyu98.html" },
-        { title: "晨雨私拍三", img: "https://xxximg.dpdns.org/img/2026/03/xxxgmchy.{ext}", url: "https://ipfsxxx.dpdns.org/gmchy81p.html" },
-        { title: "晨雨丽人体艺术", img: "https://xxximg.dpdns.org/img/2026/03/xxxchyu.%7Bext%7D", url: "https://ipfsxxx.dpdns.org/chyu30.html" },
-        { title: "卷须", img: "https://xxximg.dpdns.org/img/2026/03/xxxqueen.{ext}", url: "https://ipfsxxx.dpdns.org/queen104p.html" },
-        { title: "上床睡觉", img: "https://xxximg.dpdns.org/img/2026/03/xxxmarie.{ext}", url: "https://ipfsxxx.dpdns.org/marie118p.html" },
-        { title: "卷须", img: "https://xxximg.dpdns.org/img/2026/03/xxxqueen.{ext}", url: "https://ipfsxxx.dpdns.org/queen104p.html" },
-        { title: "上床睡觉", img: "https://xxximg.dpdns.org/img/2026/03/xxxmarie.{ext}", url: "https://ipfsxxx.dpdns.org/marie118p.html" },
-        { title: "竖版示例 02", img: "https://xxximg.dpdns.org/img/2026/03/xxxqueen.{ext}", url: "https://ipfsxxx.dpdns.org/queen104p.html" },
-        { title: "上床睡觉", img: "https://xxximg.dpdns.org/img/2026/03/xxxmarie.{ext}", url: "https://ipfsxxx.dpdns.org/marie118p.html" },
-        { title: "竖版示例 02", img: "https://xxximg.dpdns.org/img/2026/03/xxxqueen.{ext}", url: "https://ipfsxxx.dpdns.org/queen104p.html" },
-        { title: "上床睡觉", img: "https://xxximg.dpdns.org/img/2026/03/xxxmarie.{ext}", url: "https://ipfsxxx.dpdns.org/marie118p.html" },
-        { title: "竖版示例 02", img: "https://xxximg.dpdns.org/img/2026/03/xxxqueen.{ext}", url: "https://ipfsxxx.dpdns.org/queen104p.html" },
-        { title: "上床睡觉", img: "https://xxximg.dpdns.org/img/2026/03/xxxmarie.{ext}", url: "https://ipfsxxx.dpdns.org/marie118p.html" },
-        { title: "卷须", img: "https://xxximg.dpdns.org/img/2026/03/xxxqueen.{ext}", url: "https://ipfsxxx.dpdns.org/queen104p.html" },
-        { title: "上床睡觉", img: "https://xxximg.dpdns.org/img/2026/03/xxxmarie.{ext}", url: "https://ipfsxxx.dpdns.org/marie118p.html" },
-        { title: "卷须", img: "https://xxximg.dpdns.org/img/2026/03/xxxqueen.{ext}", url: "https://ipfsxxx.dpdns.org/queen104p.html" },
-        { title: "上床睡觉", img: "https://xxximg.dpdns.org/img/2026/03/xxxmarie.{ext}", url: "https://ipfsxxx.dpdns.org/marie118p.html" },
-        { title: "卷须", img: "https://xxximg.dpdns.org/img/2026/03/xxxqueen.{ext}", url: "https://ipfsxxx.dpdns.org/queen104p.html" },
-        { title: "上床睡觉", img: "https://xxximg.dpdns.org/img/2026/03/xxxmarie.{ext}", url: "https://ipfsxxx.dpdns.org/marie118p.html" },
-        { title: "卷须", img: "https://xxximg.dpdns.org/img/2026/03/xxxqueen.{ext}", url: "https://ipfsxxx.dpdns.org/queen104p.html" },
-        { title: "上床睡觉", img: "https://xxximg.dpdns.org/img/2026/03/xxxmarie.{ext}", url: "https://ipfsxxx.dpdns.org/marie118p.html" },
-        { title: "卷须", img: "https://xxximg.dpdns.org/img/2026/03/xxxqueen.{ext}", url: "https://ipfsxxx.dpdns.org/queen104p.html" },
-        { title: "上床睡觉", img: "https://xxximg.dpdns.org/img/2026/03/xxxmarie.{ext}", url: "https://ipfsxxx.dpdns.org/marie118p.html" },
-        { title: "竖版示例 02", img: "https://xxximg.dpdns.org/img/2026/03/xxxqueen.{ext}", url: "https://ipfsxxx.dpdns.org/queen104p.html" },
-        { title: "上床睡觉", img: "https://xxximg.dpdns.org/img/2026/03/xxxmarie.{ext}", url: "https://ipfsxxx.dpdns.org/marie118p.html" },
-        { title: "竖版示例 02", img: "https://xxximg.dpdns.org/img/2026/03/xxxqueen.{ext}", url: "https://ipfsxxx.dpdns.org/queen104p.html" },
-        { title: "上床睡觉", img: "https://xxximg.dpdns.org/img/2026/03/xxxmarie.{ext}", url: "https://ipfsxxx.dpdns.org/marie118p.html" },
-        { title: "竖版示例 02", img: "https://xxximg.dpdns.org/img/2026/03/xxxqueen.{ext}", url: "https://ipfsxxx.dpdns.org/queen104p.html" },
-        { title: "竖版示例 03", img: "https://yzcdn.cn", url: "#" },
-        { title: "竖版示例 04", img: "https://yzcdn.cn", url: "#" },
-        { title: "竖版示例 05", img: "https://yzcdn.cn", url: "#" }
-    ];
+    <div class="main-content">
+        <div class="gallery-grid" id="galleryGrid"></div>
+    </div>
 
-    const grid = document.getElementById('mainGrid');
-    grid.innerHTML = imageList.map(item => `
-        <a href="${item.url}" class="grid-item">
-            <div class="image-box">
-                <img src="${item.img}" loading="lazy">
-            </div>
-            <div class="title">${item.title}</div>
-        </a>
-    `).join('');
-</script>
+    <div class="pagination">
+        <button class="page-btn" id="prev" onclick="changePage(-1)">上一页</button>
+        <span class="page-text" id="pageIndicator"></span>
+        <button class="page-btn" id="next" onclick="changePage(1)">下一页</button>
+    </div>
+
+    <script>
+        const imagesPerPage = 20;
+        let currentPage = 1;
+
+        // --- 数据录入区 ---
+        // 你可以在这里添加你的图片、链接和对应的标题
+        const myData = [
+        { title: "上床睡觉", imgUrl: "https://xxximg.dpdns.org/img/2026/03/xxxmarie.{ext}", linkTo: "https://ipfsxxx.dpdns.org/marie58p.html" },
+        { title: "卷须", imgUrl: "https://xxximg.dpdns.org/img/2026/03/xxxqueen.{ext}", linkTo: "https://ipfsxxx.dpdns.org/queen104p.html" },
+        { title: "梦", imgUrl: "https://xxximg.dpdns.org/img/2026/03/xxxalecia.{ext}", linkTo: "https://ipfsxxx.dpdns.org/alecia25p.html" },
+        { title: "晨雨私拍一", imgUrl: "https://xxximg.dpdns.org/img/2026/03/xxxgomcy.%7Bext%7D", linkTo: "https://ipfsxxx.dpdns.org/gomcy164p.html" },
+        { title: "晨雨私拍二", imgUrl: "https://xxximg.dpdns.org/img/2026/03/xxxgomcyu.%7Bext%7D", linkTo: "https://ipfsxxx.dpdns.org/gomcyu98.html" },
+        { title: "晨雨私拍三", imgUrl: "https://xxximg.dpdns.org/img/2026/03/xxxgmchy.{ext}", linkTo: "https://ipfsxxx.dpdns.org/gmchy81p.html" },
+        { title: "晨雨丽人体艺术", imgUrl: "https://xxximg.dpdns.org/img/2026/03/xxxchyu.%7Bext%7D", linkTo: "https://ipfsxxx.dpdns.org/chyu30.html" },
+        { title: "上床睡觉", imgUrl: "https://xxximg.dpdns.org/img/2026/03/xxxmarie.{ext}", linkTo: "https://ipfsxxx.dpdns.org/marie58p.html" },
+        { title: "卷须", imgUrl: "https://xxximg.dpdns.org/img/2026/03/xxxqueen.{ext}", linkTo: "https://ipfsxxx.dpdns.org/queen104p.html" },
+        { title: "梦", imgUrl: "https://xxximg.dpdns.org/img/2026/03/xxxalecia.{ext}", linkTo: "https://ipfsxxx.dpdns.org/alecia25p.html" },
+        { title: "晨雨私拍一", imgUrl: "https://xxximg.dpdns.org/img/2026/03/xxxgomcy.%7Bext%7D", linkTo: "https://ipfsxxx.dpdns.org/gomcy164p.html" },
+        { title: "晨雨私拍二", imgUrl: "https://xxximg.dpdns.org/img/2026/03/xxxgomcyu.%7Bext%7D", linkTo: "https://ipfsxxx.dpdns.org/gomcyu98.html" },
+        { title: "晨雨私拍三", imgUrl: "https://xxximg.dpdns.org/img/2026/03/xxxgmchy.{ext}", linkTo: "https://ipfsxxx.dpdns.org/gmchy81p.html" },
+        { title: "晨雨丽人体艺术", imgUrl: "https://xxximg.dpdns.org/img/2026/03/xxxchyu.%7Bext%7D", linkTo: "https://ipfsxxx.dpdns.org/chyu30.html" },
+        { title: "上床睡觉", imgUrl: "https://xxximg.dpdns.org/img/2026/03/xxxmarie.{ext}", linkTo: "https://ipfsxxx.dpdns.org/marie58p.html" },
+        { title: "卷须", imgUrl: "https://xxximg.dpdns.org/img/2026/03/xxxqueen.{ext}", linkTo: "https://ipfsxxx.dpdns.org/queen104p.html" },
+        { title: "梦", imgUrl: "https://xxximg.dpdns.org/img/2026/03/xxxalecia.{ext}", linkTo: "https://ipfsxxx.dpdns.org/alecia25p.html" },
+        { title: "晨雨私拍一", imgUrl: "https://xxximg.dpdns.org/img/2026/03/xxxgomcy.%7Bext%7D", linkTo: "https://ipfsxxx.dpdns.org/gomcy164p.html" },
+        { title: "晨雨私拍二", imgUrl: "https://xxximg.dpdns.org/img/2026/03/xxxgomcyu.%7Bext%7D", linkTo: "https://ipfsxxx.dpdns.org/gomcyu98.html" },
+        { title: "晨雨私拍三", imgUrl: "https://xxximg.dpdns.org/img/2026/03/xxxgmchy.{ext}", linkTo: "https://ipfsxxx.dpdns.org/gmchy81p.html" },
+        { title: "晨雨丽人体艺术", imgUrl: "https://xxximg.dpdns.org/img/2026/03/xxxchyu.%7Bext%7D", linkTo: "https://ipfsxxx.dpdns.org/chyu30.html" },
+        { title: "上床睡觉", imgUrl: "https://xxximg.dpdns.org/img/2026/03/xxxmarie.{ext}", linkTo: "https://ipfsxxx.dpdns.org/marie58p.html" },
+        { title: "卷须", imgUrl: "https://xxximg.dpdns.org/img/2026/03/xxxqueen.{ext}", linkTo: "https://ipfsxxx.dpdns.org/queen104p.html" },
+        { title: "梦", imgUrl: "https://xxximg.dpdns.org/img/2026/03/xxxalecia.{ext}", linkTo: "https://ipfsxxx.dpdns.org/alecia25p.html" },
+        { title: "晨雨私拍一", imgUrl: "https://xxximg.dpdns.org/img/2026/03/xxxgomcy.%7Bext%7D", linkTo: "https://ipfsxxx.dpdns.org/gomcy164p.html" },
+        { title: "晨雨私拍二", imgUrl: "https://xxximg.dpdns.org/img/2026/03/xxxgomcyu.%7Bext%7D", linkTo: "https://ipfsxxx.dpdns.org/gomcyu98.html" },
+        { title: "晨雨私拍三", imgUrl: "https://xxximg.dpdns.org/img/2026/03/xxxgmchy.{ext}", linkTo: "https://ipfsxxx.dpdns.org/gmchy81p.html" },
+        { title: "晨雨丽人体艺术", imgUrl: "https://xxximg.dpdns.org/img/2026/03/xxxchyu.%7Bext%7D", linkTo: "https://ipfsxxx.dpdns.org/chyu30.html" }
+];
+        for (let i = 1; i <= 0; i++) {
+            myData.push({
+                title: `我的精选图片 ${i}`,            // 标题
+                imgUrl: `https://picsum.photos{i}`, // 图片地址
+                linkTo: `detail-${i}.html`            // 跳转链接
+            });
+        }
+
+        const totalPages = Math.ceil(myData.length / imagesPerPage);
+
+        function renderGallery() {
+            const grid = document.getElementById('galleryGrid');
+            grid.innerHTML = '';
+
+            const start = (currentPage - 1) * imagesPerPage;
+            const items = myData.slice(start, start + imagesPerPage);
+
+            items.forEach(item => {
+                const itemHtml = `
+                    <div class="card">
+                        <a href="${item.linkTo}">
+                            <img src="${item.imgUrl}" loading="lazy" alt="${item.title}">
+                            <div class="title-overlay">${item.title}</div>
+                        </a>
+                    </div>
+                `;
+                grid.insertAdjacentHTML('beforeend', itemHtml);
+            });
+
+            document.getElementById('pageIndicator').innerText = `第 ${currentPage} / ${totalPages} 页`;
+            document.getElementById('prev').disabled = (currentPage === 1);
+            document.getElementById('next').disabled = (currentPage === totalPages);
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function changePage(step) {
+            currentPage += step;
+            renderGallery();
+        }
+
+        renderGallery();
+    </script>
 
 </body>
 </html>
