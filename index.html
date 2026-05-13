@@ -32,6 +32,12 @@
 
 	</div>
 	</div>
+<script>
+  // 自动抓取系统年份并注入到 id 为 autoyear 的标签中
+  document.getElementById("autoyear").textContent = new Date().getFullYear();
+</script>
+
+
 	<script type="text/javascript">
 document.addEventListener('DOMContentLoaded', function() {
     var closeBtn = document.getElementById('close-page-btn');
